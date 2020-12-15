@@ -3,7 +3,9 @@
  $(document).ready(function(){
      let mainSection=$("#mainSection");
      let btnSubmit;
+     let timer=$("#timer");
      let header=$("#header");
+
      header.animate({width: 60 * 15, height: 6 * 15, "font-size": 45, "line-height": 6 * 15 },1500);
 
      generaDomande();
@@ -67,6 +69,7 @@
      function controllaRisposte(){
           let fieldsets;
           let rispostaUtente;
+          let esito;
           let punteggio=0;
           btnSubmit.prop("disabled",true);
           btnSubmit.css({"backgroundColor" : "#CCC","color" : "#999"});
@@ -76,35 +79,76 @@
                let currentfieldset=mainSection.children("fieldset").eq(i);
                for (let j = 0; j < currentfieldset.children("p").length; j++) 
                {
-                    let question=currentfieldset.eq(i).children("p");
+                    let question=currentfieldset.children("p").eq(j);
+                    let opts=question.children("input[type=radio]");
                     //continuare a mettere .eq(i) e non [i] perchè rimane un oggetto jquery
-                    rispostaUtente=question.eq(j).children("input[type=radio]:checked").val();
-                    console.log(rispostaUtente);
-                    console.log(question.eq(j).prop("id"));
-                    //console.log(rispostaUtente.text);
-                    //console.log(questions.eq(i).prop("id"));
-                    //console.log(questions.eq(i).prop("id"));
-                    if(rispostaUtente==question.eq(j).prop("id"))
+                    if(opts.eq(0).is(":checked"))
                     {
-                         //console.log("giusto");
-                         punteggio++;
+                         rispostaUtente=opts.eq(0).val();
+                         //console.log(rispostaUtente);
+                         //console.log(question.prop("id"));
                     }
                     else
                     {
-                         punteggio=punteggio-0.25;
-                         if(question.eq(j).prop("id","T"))
+                         if (opts.eq(1).is(":checked")) 
                          {
+                              rispostaUtente=opts.eq(1).val();
+                              //console.log(rispostaUtente);
+                              //console.log(question.prop("id"));
+                         }
+                         else
+                         {
+                              rispostaUtente="";
+                         }
+                    }
+                    //console.log(rispostaUtente.text);
+                    //console.log(questions.eq(i).prop("id"));
+                    //console.log(questions.eq(i).prop("id"));
+                    if(rispostaUtente=="")
+                    {
+                         if(question.prop("id")=="T")
+                         {
+                              console.log("entro qui");
                               question.children("span").eq(0).css("color","red");
                          }
-                              
                          else
                          {
                               question.children("span").eq(1).css("color","red");
                          }
                     }
+                    else
+                    {
+                         if(rispostaUtente==question.prop("id"))
+                         {
+                              //console.log("giusto");
+                              punteggio++;
+                         }
+                         else
+                         {
+                              punteggio=punteggio-0.25;
+                              if(question.prop("id")=="T")
+                              {
+                                   console.log("entro qui");
+                                   question.children("span").eq(0).css("color","red");
+                              }
+                                   
+                              else
+                              {
+                                   question.children("span").eq(1).css("color","red");
+                              }
+                         }
+                    }
                }
           }
-          alert("Il tuo punteggio finale è "+punteggio);
+          if(punteggio>=16)
+          {
+               esito="congratulazioni sei promosso!";
+          }
+          else
+          {
+               esito="spiacenti non sei promosso.";
+          }
+          alert("Il tuo punteggio finale è "+punteggio+", "+esito);
      }
  });
 
