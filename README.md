@@ -3,8 +3,8 @@
 
 # Troverete esercizi di:
 
-jQuery
-Ajax
+jQuery <br/>
+Ajax <br/>
 XML
 
 NB: Se si vuole clonare la repository sul proprio PC, affinchè le applicazioni possano essere avviate senza errori:
