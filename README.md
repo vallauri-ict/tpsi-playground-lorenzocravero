@@ -1,8 +1,7 @@
-# tpsi-playground-lorenzocravero
-tpsi-playground-lorenzocravero created by GitHub Classroom
+# Repository TPSI di Cravero Lorenzo
 
-Repository TPSI di Cravero Lorenzo
-Troverete esercizi di:
+
+# Troverete esercizi di:
 
 jQuery
 Ajax
