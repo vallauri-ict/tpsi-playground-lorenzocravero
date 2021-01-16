@@ -24,7 +24,7 @@ header {
     float: left;
 	margin:18px;
 }
-.article-image {
+.image {
     height: 130px;
 }
 .article .image:hover {
