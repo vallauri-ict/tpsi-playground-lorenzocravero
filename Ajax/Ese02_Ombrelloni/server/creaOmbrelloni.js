@@ -23,8 +23,8 @@ $(document).ready(function(){
 	}
 	
 	
-	$("<a>").prop({"download":"ombrelloni.json", "href":"#"}).text("salva json su disco")
-	.appendTo(wrapper).on("click", function(){
+	//$("<a>").prop({"download":"ombrelloni.json", "href":"#"}).text("salva json su disco")
+	$("a").appendTo(wrapper).on("click", function(){
 		let json = {"utenti":utenti, "ombrelloni":ombrelloni}
 		json = JSON.stringify(json, null, 3)
 		let blob = new Blob([json], {type : 'application/json'});
