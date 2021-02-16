@@ -22,7 +22,6 @@ $(document).ready(function () {
     citta = cities;
     let opt = $("<option>");
     opt.text("All");
-    opt.prop("citta", 0);
     opt.appendTo(_lstCitta);
     for (const city of cities) {
       opt = $("<option>");
@@ -54,78 +53,43 @@ $(document).ready(function () {
   request.fail(errore);
   request.done(function (concerts) {
     concerti = concerts;
-    creaTabella();
+    visualConcerti();
   });
 
   _btnFiltro.on("click",function(){
-    if(_lstCitta.val() == "All")
-    {
+      let cittaSelezionata=_lstCitta.prop("selectedIndex");
+      let genereSelezionato=_lstGeneri.prop("selectedIndex");
+      if(_lstCitta.val() == "All" )
+      {
         if(_lstGeneri.val() == "All")
         {
-            creaTabella();
+          request = inviaRichiesta("get",URL+"/concerti");
         }
-    }
-    let cittaSelezionata=_lstCitta.prop("selectedIndex");
-    let genereSelezionato=_lstGeneri.prop("selectedIndex");
-    console.log(cittaSelezionata);
-    request = inviaRichiesta("get",URL+"/concerti?codCitta="+cittaSelezionata+"&codGenere="+genereSelezionato);
-    request.fail(errore);
-    request.done(function(concertiFiltrati){
-        _tbody.empty();
-        for (const concerto of concertiFiltrati) 
+        else
         {
-            let tr = $("<tr>");
-            tr.appendTo(_tbody);
-
-            let td = $("<td>");
-            td.text(concerto.id);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(concerto.cantante);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(concerto.data);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(generi[concerto.codGenere - 1].genere);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(citta[concerto.codCitta - 1].citta);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(citta[concerto.codCitta - 1].struttura);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            td.text(citta[concerto.codCitta - 1].nPosti);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            let btn = $("<button>");
-            btn.text("Dettagli");
-            btn.css("backgroundColor", "#007FFF");
-            btn.prop("dettagli", concerto.dettagli);
-            btn.on("click", visualDettagli);
-            btn.appendTo(td);
-            td.appendTo(tr);
-
-            td = $("<td>");
-            btn = $("<button>");
-            btn.text("Prenota");
-            btn.css("backgroundColor", "#00BB2D");
-            btn.on("click", prenota);
-            btn.appendTo(td);
-            td.appendTo(tr);
+          request = inviaRichiesta("get",URL+"/concerti?codGenere="+genereSelezionato);
         }
-    })
+      }
+      else
+      {
+        if(_lstGeneri.val() == "All")
+        {
+          request=inviaRichiesta("get",URL + "/concerti?codCitta="+cittaSelezionata);
+        }
+        else
+        {
+          request = inviaRichiesta("get",URL+"/concerti?codCitta="+cittaSelezionata+"&codGenere="+genereSelezionato);
+        }
+      }
+      request.fail(errore);
+      request.done(function(concertiFiltrati){
+          _tbody.empty();
+          concerti=concertiFiltrati;
+          visualConcerti();
+        })
   });
 
-  function creaTabella() {
+  function visualConcerti() {
     _tbody.empty();
     for (const concerto of concerti) {
       let tr = $("<tr>");
@@ -171,6 +135,7 @@ $(document).ready(function () {
       td = $("<td>");
       btn = $("<button>");
       btn.text("Prenota");
+      btn.prop("prenotazione",concerto.codCitta);
       btn.css("backgroundColor", "#00BB2D");
       btn.on("click", prenota);
       btn.appendTo(td);
@@ -185,6 +150,18 @@ $(document).ready(function () {
   }
 
   function prenota() {
-    alert("Prenotazione eseguita con successo");
+    let posti;
+    request=inviaRichiesta("get",URL+"/citta?id="+$(this).prop("prenotazione"));
+    request.fail(errore);
+    request.done(function(prenotazioni){
+      let prenotazione=prenotazioni[0];
+      posti=prenotazione.nPosti-1;
+    })
+    request = inviaRichiesta("patch",URL+"/citta/"+$(this).prop("prenotazione"),{"nPosti" : posti});
+    request.fail(errore);
+    request.done(function(){
+      alert("Prenotazione effettuata correttamente");
+      visualConcerti();
+    }) 
   }
 });
