@@ -14,6 +14,32 @@ $(document).ready(function(){
 	let _dataInizio = $("#wrapper").find("input").eq(0)
 	let _dataFine = $("#wrapper").find("input").eq(1)
 	let _msg = $("#wrapper").children("label").eq(2)
+	let _login=$("#login");
+	const URL="http://localhost:3000";
+	let _btnSubmit=$("#login .submit");
+
+	_wrapper.hide();
+	_btnSubmit.on("click",function(){
+		let user=$("#login input").eq(0).val();
+		let pass=$("#login input").eq(1).val();
+		let url= URL +`/utenti?nome=${user}&password=${pass}`;
+		let request=inviaRichiesta("get",url); //request è un oggetto promise
+		request.fail(errore);
+		request.done(function(data){
+			console.log(data);
+			if(data.length == 0)
+			{
+				let div=$("#login .submit").prev();
+				div.text("Dati errati");
+			}
+			else
+			{
+				
+			}
+		})
+	})
+
+
 
 	_mappa.hide();
 	_btnVisualizzaMappa.prop("disabled",true);
@@ -43,6 +69,7 @@ $(document).ready(function(){
 
 	_btnVisualizzaMappa.on("click",function(){
 		_mappa.show();
+		let url=URL+"\ombrelloni";
 		let request = inviaRichiesta("GET",url);
 		request.fail(errore);
 		request.done(function(data){
