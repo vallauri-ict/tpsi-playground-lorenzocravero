@@ -3,6 +3,7 @@
 
 # Troverete esercizi di:
 
+Geo Location <br/>
 jQuery <br/>
 Ajax <br/>
 XML
