@@ -8,6 +8,8 @@ jQuery <br/>
 Ajax <br/>
 XML
 
+# NB: Gli esercizi di Geo Location NON contengono la key privata, vengono inseriti a fini di completezza dei repository
+
 NB: Se si vuole clonare la repository sul proprio PC, affinchè le applicazioni possano essere avviate senza errori:
 
 -scaricare il codice di jQuery (https://jquery.com/download/) <br/>
