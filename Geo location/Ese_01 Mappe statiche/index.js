@@ -1,7 +1,7 @@
 "use strict"
 
 const URL = "https://maps.googleapis.com/maps/api/"
-const key  = ""; 
+const key  = "" 
 
 const params = {
 	"key":key,
@@ -30,6 +30,7 @@ window.onload = function () {
 		button.on("click",visualizzaMappa);
 	}
 
+	$("button").eq(0).trigger("click");
 
 
 	function visualizzaMappa(){
@@ -44,6 +45,8 @@ window.onload = function () {
 		}
 		console.log(url);
 		imgBox.prop("src", url);
+		$("button").removeClass("active");
+		$(this).addClass("active");
 	}
 
 	function setParameters(mapType){
