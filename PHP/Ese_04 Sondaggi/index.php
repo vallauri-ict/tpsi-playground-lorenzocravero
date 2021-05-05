@@ -8,7 +8,7 @@
 		<script type="application/javascript" src="index.js"></script>
 	</head>
 	
-	<body>
+	<body style="text-align:center">
 
 		<?php
 			require("php-mysqli.php");
@@ -37,6 +37,9 @@
 					$id = $item["id"];
 					echo("<option value=$id>$nome</option>");
 				}
+
+				//step 5: chiusura connessione (tutte le pagine devono finire così)
+				$con->close();
 			?>
 			</select>
 			<input type="submit" value="Invia"/>

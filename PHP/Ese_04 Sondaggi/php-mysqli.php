@@ -25,7 +25,7 @@
         {
             $rs = $con->query($sql);
         }
-        catch(mysqli_sql_exeption $ex)
+        catch(mysqli_sql_exception $ex)
         {
             $con->close();
             die("Errore nella query sql");
@@ -39,7 +39,6 @@
         else
             $data = $rs;
 
-        $con->close();
         return $data;
     }
 ?>

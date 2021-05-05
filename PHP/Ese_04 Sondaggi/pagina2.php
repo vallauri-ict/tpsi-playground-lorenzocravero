@@ -28,12 +28,36 @@
 
 			//step 3: esecuzione query
 			$sql = "SELECT * FROM sondaggi WHERE id=$id";
+			//* significa tutti i campi
 			$rs = _execute($con, $sql)[0];
-			
+			//restituisce sempre un vettore enumerativo
+
 			//step 4: visualizzazione dati
 			$titolo = $rs["titolo"];
+			$domanda = $rs["domanda"];
 			echo("<h1>Sondaggio su $titolo</h1>");
-			echo("<img src=img/$rs[img] />");
+			echo("<img style=' margin:10px' src='img/$rs[img]'>");
+			echo("<h3 style='margin:10px'>Rispondi alla seguente domanda:</h3>");
+			echo("<p style='margin:10px'>$domanda</p>");
+			//se si vuole usare una variabile composta all'interno
+			//di una echo bisogna omettere gli apici attorno al nome del campo
+		?>
+		<form action="risultati.php" method="post">
+			<div style="margin:10px">
+				<input type="radio" name="optRisposta" value="nSi">Si
+				<br>
+				<input type="radio" name="optRisposta" value="nNo">No
+				<br>
+				<input type="radio" name="optRisposta" value="nNs">Non so
+			</div>
+			<?php
+                echo("<input type='hidden' name='id' value=$id>");
+            ?>
+			<input style="margin:10px" type="submit" value="Invia">
+		</form>
+		<?php
+			//step 5: chiudere la connessione
+			$con->close();
 		?>
 	</body>
 </html>
