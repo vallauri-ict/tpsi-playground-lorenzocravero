@@ -11,7 +11,6 @@
 		<script src="index.js"></script>
 </head>
 	<body>
-		<h1>Pagina 2</h1>
 		<?php
 			//require va a linkare una determinata pagina per renderne visibile tutto il contenuto nella pagina da cui viene linkata
 			require("php-mysqli.php");
@@ -68,9 +67,25 @@
 			$scoperta = $con->real_escape_string($scoperta);
 
 			//step 3: esecuzione della query
-			$sql = "INSERT INTO studenti(nome, settore, hobbies, residenza, note, media) VALUES ($nome,$indirizzo,$hobbies,$citta,$segni,$scoperta)";
+			$sql = "INSERT INTO studenti(nome, settore, hobbies, residenza, note, media) VALUES ('$nome','$indirizzo','$hobbies',$citta,'$segni','$scoperta') ";
 			$ris = _execute($con, $sql);
-			echo($ris),
+
+			//nota: concatenamento in php è .= non +=
+
+			//step 4: visualizzazione dei dati
+			if($ris)
+			{
+				echo("<h1>Dati arrivati correttamente!</h1>");
+				echo("<p>Elenco dati inseriti: </p>");
+				echo("<p>$nome</p>");
+				echo("<p>$indirizzo</p>");
+				echo("<p>$hobbies</p>");
+				echo("<p>$citta</p>");
+				echo("<p>$segni</p>");
+				echo("<p>$scoperta</p>");
+			}
+			else
+				echo("Errore inserimento dati");
 		?>
 	</body>
 </html>
