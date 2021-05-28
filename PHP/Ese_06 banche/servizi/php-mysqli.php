@@ -1,5 +1,7 @@
 <?php
-    function _connection($dbName)
+
+    define('DBNAME','4b_banche');
+    function _connection()
     {
         define('DBHOST', 'localhost');
         define('DBUSER', 'root');
@@ -9,13 +11,14 @@
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         try
         {
-            $con = new mysqli(DBHOST, DBUSER, DBPASS, $dbName); 
+            $con = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME); 
             //per la gestione degli apici
             $con->set_charset("utf8");
             return $con;
         }
         catch (mysqli_sql_exception $ex) 
         {
+            http_response_code(503);
             die ("Errore connessione db: <br>" . $ex->getMessage()); 
         }
     }
@@ -25,9 +28,11 @@
         {
             $rs = $con->query($sql);
         }
-        catch (mysqli_sql_exception $ex)
+        catch(mysqli_sql_exception $ex)
         {
-            die("Errore nella query sql: <br>". $ex->getMessage());
+            $con->close();
+            http_response_code(500);
+            die("Errore nella query sql");
         }
         //se il comando è una query di tipo select, convertiamo il recordset in un vettore di json
         //i comandi di tipo non select restituiscono semplicemente un booleano che lasciamo così com'è
@@ -38,7 +43,6 @@
         else
             $data = $rs;
 
-        $con->close();
         return $data;
     }
 ?>
